@@ -5,11 +5,12 @@ const createTwitchChatClient = require('./twitch');
 
 // The main handler function
 async function main() {
-	// Create the OBS client
+	// Create the OBS Websocket that will interface with your OBS client
 	const obs = new OWS();
 	const address = `ws://${config.server.ip}:${config.server.port}`;
 	let reconnection;
 
+	// The function that handles connecting to your OBS instance.
 	const OBSConnect = async () => {
 		if (config.debug) console.log('Attempting connection to OBS...');
 		try {
