@@ -8,13 +8,49 @@ async function main() {
 	// Create the OBS client
 	const obs = new OWS();
 	const address = `ws://${config.server.ip}:${config.server.port}`;
+	let reconnection;
+
+	const OBSConnect = async () => {
+		if (config.debug) console.log('Attempting connection to OBS...');
+		try {
+			await obs.connect(address, config.server.password);
+			return true;
+		}
+		catch(err) {
+			if (config.debug) console.error(err);
+			return false;
+		}
+	}
 
 	// Connect to OBS
-	const obsConnData = await obs.connect(address, config.server.password);
-	console.log(`Connected to OBS`);
+	try {
+		const connected = await OBSConnect()
+		if (connected) console.log(`Connected to OBS`);
+		else console.log(`Failed to connect to OBS`);
+	}
+	catch(err) {
+		console.error(`Error while connecting to OBS`, err);
+	}
+
+	obs.on('ConnectionOpened', () => {
+		console.log(`Connected to OBS`);
+		clearInterval(reconnection);
+	});
+	obs.on('ConnectionClosed', () => {
+		console.log(`Disconnected from OBS, attempting to reconnect every 10s`);
+		// Set reconnection attempt every 10 seconds
+		if (!reconnection) reconnection = setInterval(OBSConnect, 1e3 * 10);
+	});
+	obs.on('ConnectionError', (err) => {
+		console.error(`OBS connection error`, err);
+	});
 
 	// Create the Twitch Chat Client and connect
-	createTwitchChatClient(obs);
+	const Twitch = await createTwitchChatClient(obs);
+
+	console.log(`Loaded and ready`);
+	console.log(`Current status:`);
+	console.log(`OBS: ${obs.identified ? 'Connected' : 'Disconnected'}`);
 }
 
 
