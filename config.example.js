@@ -60,5 +60,6 @@ module.exports = {
 			}
 		}
 	},
-	"debug": true
+	// Whether to log more information for debugging. In production use you should set it to false unless there is an error troubling you or if you're curious. :)
+	"debug": false
 }
