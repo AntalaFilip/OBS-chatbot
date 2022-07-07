@@ -34,6 +34,7 @@ async function main() {
 
 	obs.on('ConnectionOpened', () => {
 		console.log(`Connected to OBS`);
+		// Stop attempting to reconnect
 		clearInterval(reconnection);
 	});
 	obs.on('ConnectionClosed', () => {
@@ -63,7 +64,7 @@ if (!config.twitch.access_token) {
 	const app = require('express')();
 	app.get('/', (req, res) => {
 		res.send(`
-		Your access token should be in your URL, in the part called access_token=.........&.... copy the part after the equals until the ampersand\n
+		Your access token should be in your URL, in the part called access_token=.........&.... Copy the part after the equals until the ampersand.\n
 		Put the token into your config.js and restart the program from the command line.
 		`);
 	});
