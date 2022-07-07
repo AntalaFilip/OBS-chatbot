@@ -1,4 +1,4 @@
-**OBS Chatbot**
+# OBS Chatbot
 
 A quick and easy chatbot script to bridge OBS Studio and your stream chats (currently supports Twitch only). 
 You or your moderators can control certain functions right from the chat.
