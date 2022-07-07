@@ -11,20 +11,22 @@ module.exports = {
 		// The port shown in the Server Port field (default 4455)
 		"port": 4455,
 		// The password shown in the Server Password field
-		"password": "uawCGHF91qAu9yGC"
+		"password": "passwordhere"
 	},
-	// If you do not have an access token, 
+	// If you do not have an access token, run the script without it, you will get a prompt to generate one from Twitch.
 	"twitch": {
 		// The Access Token of the Twitch Account used in Authentication
-		"access_token": "hs5inz7fthml59ai6pv9d7fcr6hlg9",
+		"access_token": "",
 		// The lowercase name of the Twitch Account used in Authentication
-		"account_name": "filipantala",
-		// Whether to reply when somebody uses a command; needs an additional chat:edit scope
-		"respondToCommands": true,
+		"account_name": "",
+		// Whether to reply when somebody uses a command; needs an additional chat:edit scope, optional
+		"respondToCommands": false,
 		// The lowercase channel names to join to
 		"channels": [
-			'filipantala'
-		]
+			
+		],
+		// The prefix used before the specific commands. If the prefix is '!obs' the commands would look like '!obs setscene scenename'
+		"commandPrefix": '!obs',
 	},
 	// List of all enabled commands, a user can use them if they either have one of the allowed badges or are in the allowedUsers list
 	/** @type {Record<string, {allowedBadges: string[], allowedUsers: string[], run: (obs, ...args) => {}}} */
@@ -41,8 +43,9 @@ module.exports = {
 			],
 			// lowercase Twitch usernames
 			allowedUsers: [
-				'filipantala',
+				
 			],
+			// Do not touch the run function, unless you want to make edits to how it behaves
 			/** @param {OBSWebSocket} obs */
 			run: async (obs, ...args) => {
 				const scene = args.join(' ');
@@ -56,5 +59,6 @@ module.exports = {
 				}
 			}
 		}
-	}
+	},
+	"debug": true
 }
