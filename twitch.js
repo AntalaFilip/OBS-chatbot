@@ -15,14 +15,20 @@ const parseBadges = (taglist) => {
 
 /** @param {OBSWebSocket} obs */
 const createTwitchChatClient = async (obs) => {
+	// Create a Websocket client to the Twitch IRC API and attempt connection to it.
 	const TwitchChatClient = new WS();
 	TwitchChatClient.connect(`wss://irc-ws.chat.twitch.tv:443`);
+
+	// Create a Promise that will resolve when the Twitch Client is connected, set up and ready.
 	const ready = new Promise((res) => {
+		// Runs when the client connects
 		TwitchChatClient.on('connect', async (connection) => {
 			console.log(`Connected to Twitch, loading...`);
 
-			// Authenticate to the Twitch Server
+			// Creates a Promise that will resolve when authenticated to the Twitch Server and has joined the channels.
 			const joining = new Promise(res => {
+				// TODO: we should also check for authentication and capabilities success, not just successfully joining the channel.
+				// The function that resolves the promise when receives confirmation from the Twitch API that it has join the channel.
 				/** @param msg {import('websocket').Message} */
 				const handleJoin = (msg) => {
 					if (msg.type === 'utf8' && msg.utf8Data.includes('JOIN')) {
